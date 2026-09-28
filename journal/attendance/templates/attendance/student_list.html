@@ -1,0 +1,10 @@
+{% extends "attendance/base.html" %}
+{% block title %}Список студентов{% endblock %}
+{% block content %}
+<h2>Студенты</h2>
+    <ul>
+        {% for student in students %}
+            <li>{{ student }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
