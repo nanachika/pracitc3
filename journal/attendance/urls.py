@@ -1,10 +1,17 @@
 from django.urls import path
-from . import views # импортируем функции из views.py
+from . import views
+
 urlpatterns = [
+    # Маршруты старые
     path('', views.index, name='attendance_index'),
-    # http://127.0.0.1:8000/attendance/ - вызовет функцию index
     path('student/<int:id>/', views.student_detail, name='student_detail'),
-    #http://127.0.0.1:8000/attendance/student/1/ откроет страницу студента с id=1
     path('students/', views.student_list, name='student_list'),
-    # http://127.0.0.1:8000/attendance/students/ + список всех студентов 
+    path('student/add/', views.add_student, name='add_student'),
+    path('student/add-model/', views.add_student_model, name='add_student_model'),
+
+    # Маршруты новые
+    path('profile/', views.profile_dispatch, name='profile_dispatch'),
+    path('student-cabinet/', views.student_cabinet, name='student_cabinet'),
+    path('teacher-cabinet/', views.teacher_cabinet, name='teacher_cabinet'),
+    path('general-profile/', views.general_profile, name='general_profile'),
 ]

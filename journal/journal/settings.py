@@ -127,3 +127,7 @@ MAILERS = {
     },
 }
 AUTH_USER_MODEL = 'attendance.User'
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'profile_dispatch'
+LOGOUT_REDIRECT_URL = 'login'
