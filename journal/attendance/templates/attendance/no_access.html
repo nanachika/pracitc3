@@ -1,0 +1,12 @@
+{% extends "attendance/base.html" %}
+
+{% block title %}Доступ запрещён{% endblock %}
+
+{% block content %}
+<div class="alert alert-danger mt-4 p-4" role="alert">
+    <h3 class="alert-heading">{{ title|default:"У вас нет доступа" }}</h3>
+    <p>Данная страница предназначена исключительно для роли: <strong>{{ role }}</strong>.</p>
+    <hr>
+    <a href="/attendance/profile/" class="btn btn-outline-danger btn-sm">Вернуться в свой профиль</a>
+</div>
+{% endblock %}

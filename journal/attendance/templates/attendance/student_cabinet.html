@@ -1,0 +1,25 @@
+{% extends "attendance/base.html" %}
+
+{% block title %}Кабинет студента{% endblock %}
+
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <h2>Личный кабинет студента</h2>
+    <p class="fs-5"><strong>Студент:</strong> {{ student }}</p>
+    <p><strong>Группа:</strong> {{ student.group }}</p>
+
+    <h4 class="mt-4">Отметки посещаемости:</h4>
+    <ul class="list-group">
+        {% for att in attendances %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ att.lesson.subject }} ({{ att.lesson.date }})
+                <span class="badge {% if att.present %}bg-success{% else %}bg-danger{% endif %}">
+                    {{ att.present|yesno:"Был,Н/Б" }}
+                </span>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-muted">Записей о посещаемости пока нет</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "attendance/base.html" %}
+
+{% block title %}Общий профиль{% endblock %}
+
+{% block content %}
+<div class="card p-4 shadow-sm">
+    <h2>Общий профиль</h2>
+    <p>Вы вошли как: <strong>{{ request.user.username }}</strong></p>
+    <div class="alert alert-info">
+        У вашей учётной записи нет привязанного профиля студента или преподавателя.
+    </div>
+</div>
+{% endblock %}
