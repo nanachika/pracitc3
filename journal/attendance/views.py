@@ -9,6 +9,7 @@ from django.conf import settings
 import uuid
 from django.contrib import messages
 from .forms import StudentAvatarForm
+from .forms import StudentFilterForm
 
 def student_avatar_update(request):
     u = request.user
@@ -44,10 +45,32 @@ def student_detail(request, id):
     student = get_object_or_404(Student, id=id)
     return render(request, "attendance/student_detail.html", {"student": student})
 
+
+
 @login_required
 def student_list(request):
-    students = Student.objects.all()
-    return render(request, "attendance/student_list.html", {"students": students})
+    form = StudentFilterForm(request.GET)
+    students = Student.objects.select_related('group').all()
+
+    if request.GET:
+        if form.is_valid():
+            last_name = form.cleaned_data.get('last_name')
+            group = form.cleaned_data.get('group')
+            group_name = form.cleaned_data.get('group_name')
+
+            if last_name:
+                students = students.filter(last_name__icontains=last_name)
+            if group:
+                students = students.filter(group=group)
+            if group_name:
+                students = students.filter(group__name__icontains=group_name)
+        else:
+            students = Student.objects.none()
+
+    return render(request, "attendance/student_list.html", {
+        "form": form,
+        "students": students
+    })
 
 class HelloView(View):
     def get(self, request):

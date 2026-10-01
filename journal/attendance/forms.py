@@ -1,6 +1,7 @@
 from django import forms
 from .models import Student
 from django.core.validators import FileExtensionValidator
+from .models import Group
 
 class StudentForm(forms.Form):
     last_name = forms.CharField(max_length=100, label="Фамилия")
@@ -33,3 +34,23 @@ class StudentAvatarForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ["avatar"]
+
+
+class StudentFilterForm(forms.Form):
+    last_name = forms.CharField(
+        label="Часть фамилии",
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Поиск по фамилии"})
+    )
+    group = forms.ModelChoiceField(
+        label="Группа",
+        queryset=Group.objects.all(),
+        required=False,
+        empty_label="Все группы",
+        widget=forms.Select(attrs={"class": "form-select"})
+    )
+    group_name = forms.CharField(
+        label="Часть названия группы",
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Например: ИВТ"})
+    )
