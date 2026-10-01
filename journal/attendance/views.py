@@ -4,7 +4,28 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Student, Teacher, Lesson, Attendance
 from .forms import StudentForm, StudentModelForm
+from pathlib import Path
+from django.conf import settings
+import uuid
+from django.contrib import messages
+from .forms import StudentAvatarForm
 
+def student_avatar_update(request):
+    u = request.user
+    if not (u.is_authenticated and getattr(u, "is_student", False)):
+        return render(request, "attendance/no_access.html", {"title": "Доступ запрещён", "role": "Студент"}, status=403)
+
+    student = u.student
+    if request.method == "POST":
+        form = StudentAvatarForm(request.POST, request.FILES, instance=student)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Аватар успешно обновлён!")
+            return redirect("student_cabinet")
+    else:
+        form = StudentAvatarForm(instance=student)
+
+    return render(request, "attendance/avatar_form.html", {"form": form})
 
 def upload_raw(request):
     if request.method == "POST" and request.FILES.get("file_upload"):
@@ -16,7 +37,6 @@ def upload_raw(request):
                 out.write(chunk)
         return HttpResponse(f"Загружено: {dest}")
     return render(request, "upload_raw.html")
-
 def index(request):
     return render(request, "attendance/index.html")
 

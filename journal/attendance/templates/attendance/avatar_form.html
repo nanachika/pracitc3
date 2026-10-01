@@ -1,0 +1,31 @@
+{% extends "attendance/base.html" %}
+
+{% block title %}Обновить аватар{% endblock %}
+
+{% block content %}
+<div class="card p-4 shadow-sm col-md-6 mx-auto">
+    <h2>Обновить аватар</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.avatar.label_tag }}
+            {{ form.avatar }}
+            {% if form.avatar.help_text %}
+                <div class="form-text">{{ form.avatar.help_text }}</div>
+            {% endif %}
+            {% if form.avatar.errors %}
+                <div class="text-danger small mt-1">{{ form.avatar.errors }}</div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+
+    {% if request.user.student.avatar %}
+        <div class="mt-4">
+            <p><strong>Текущий аватар:</strong></p>
+            <img src="{{ request.user.student.avatar.url }}" alt="avatar" class="img-thumbnail" style="max-width: 180px;">
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

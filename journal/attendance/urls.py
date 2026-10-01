@@ -15,4 +15,5 @@ urlpatterns = [
     path('teacher-cabinet/', views.teacher_cabinet, name='teacher_cabinet'),
     path('general-profile/', views.general_profile, name='general_profile'),
     path('upload-raw/', views.upload_raw, name='upload_raw'),
+    path('student/avatar/', views.student_avatar_update, name='student_avatar_update'),
 ]
