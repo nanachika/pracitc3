@@ -6,6 +6,16 @@ from .models import Student, Teacher, Lesson, Attendance
 from .forms import StudentForm, StudentModelForm
 
 
+def upload_raw(request):
+    if request.method == "POST" and request.FILES.get("file_upload"):
+        f = request.FILES["file_upload"]
+        dest = Path(settings.MEDIA_ROOT) / "raw" / f.name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        with dest.open("wb+") as out:
+            for chunk in f.chunks():
+                out.write(chunk)
+        return HttpResponse(f"Загружено: {dest}")
+    return render(request, "upload_raw.html")
 
 def index(request):
     return render(request, "attendance/index.html")

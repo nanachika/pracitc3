@@ -1,0 +1,17 @@
+{% extends "attendance/base.html" %}
+
+{% block title %}Ручная загрузка файла{% endblock %}
+
+{% block content %}
+<div class="card p-4 shadow-sm col-md-6 mx-auto">
+    <h2>Ручная загрузка файла</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Выберите файл:</label>
+            <input type="file" name="file_upload" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+</div>
+{% endblock %}
