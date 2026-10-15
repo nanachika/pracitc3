@@ -16,4 +16,5 @@ urlpatterns = [
     path('general-profile/', views.general_profile, name='general_profile'),
     path('upload-raw/', views.upload_raw, name='upload_raw'),
     path('student/avatar/', views.student_avatar_update, name='student_avatar_update'),
+    path('students/', views.student_list, name='student_list'),
 ]

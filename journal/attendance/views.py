@@ -10,6 +10,9 @@ import uuid
 from django.contrib import messages
 from .forms import StudentAvatarForm
 from .forms import StudentFilterForm
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+
 
 def student_avatar_update(request):
     u = request.user
@@ -49,28 +52,18 @@ def student_detail(request, id):
 
 @login_required
 def student_list(request):
-    form = StudentFilterForm(request.GET)
-    students = Student.objects.select_related('group').all()
-
-    if request.GET:
-        if form.is_valid():
-            last_name = form.cleaned_data.get('last_name')
-            group = form.cleaned_data.get('group')
-            group_name = form.cleaned_data.get('group_name')
-
-            if last_name:
-                students = students.filter(last_name__icontains=last_name)
-            if group:
-                students = students.filter(group=group)
-            if group_name:
-                students = students.filter(group__name__icontains=group_name)
-        else:
-            students = Student.objects.none()
-
-    return render(request, "attendance/student_list.html", {
-        "form": form,
-        "students": students
-    })
+    student_qs = Student.objects.all().order_by('last_name')
+    paginator = Paginator(student_qs, 2)  
+    page_number = request.GET.get('page')  
+    
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+        
+    return render(request, 'attendance/student_list.html', {'page_obj': page_obj})
 
 class HelloView(View):
     def get(self, request):
@@ -100,7 +93,6 @@ def add_student_model(request):
 @login_required
 def profile_dispatch(request):
     user = request.user
-    # Фиксируем явный приоритет совмещённых ролей: преподаватель, затем студент
     if user.is_teacher:
         return redirect('teacher_cabinet')
     elif user.is_student:
